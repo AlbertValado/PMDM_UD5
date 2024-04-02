@@ -31,8 +31,19 @@ class ProductScreen extends StatelessWidget {
                   top: 60,
                   right: 20,
                   child: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       //TODO: Implementar funcionalitat de cercar imatge de la galeria
+                      /*
+                      final ImagePicker _picker = ImagePicker();
+                      //Pick an Image
+                      final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
+                      if (photo == null) {
+                        print('No tenim imatge');
+                      } else {
+                        print ('Tenim imatge ${photo.path}');
+                        productsService.updateSelectedProductImage(photo.path);
+                      }
+                      */
                     },
                     icon: Icon(
                       Icons.camera_alt_outlined,

@@ -1,0 +1,16 @@
+{
+  "products": {
+    "asd456": {
+      "available": true,
+      "name": "RTX 3090",
+      "picture": "https://asset.msi.com/resize/image/global/product/product_1648779789e2ad4204facc0ea0469f45c5fa07c051.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png",
+      "price": 2999
+    },
+    "qwe123": {
+      "available": true,
+      "name": "PC Gamer",
+      "picture": "https://storage.googleapis.com/catalog-pictures-carrefour-es/catalog/pictures/hd_510x_/8425402437810_1.jpg",
+      "price": 499
+    }
+  }
+}
