@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:productes_app/models/products.dart';
+
+import '../models/models.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final Product product;
+  const ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +19,10 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroudWidget(),
-            _ProductDetails(),
-            Positioned(top: 0, right: 0, child: _PriceTag()),
-            //TODO: Mostrar de forma condicional depenent de si el producte està disponible o no
+            _BackgroundWidget(productImage: product.picture,),
+            _ProductDetails(product: product,),
+            Positioned(top: 0, right: 0, child: _PriceTag(productPrice: product.price.toString(),)),
+          if(!product.available)
             Positioned(top: 0, left: 0, child: _Availability()),
           ],
         ),
@@ -39,9 +43,10 @@ class ProductCard extends StatelessWidget {
       );
 }
 
-class _BackgroudWidget extends StatelessWidget {
-  const _BackgroudWidget({
-    Key? key,
+class _BackgroundWidget extends StatelessWidget {
+  final String? productImage;
+  const _BackgroundWidget({
+    Key? key, required this.productImage,
   }) : super(key: key);
 
   @override
@@ -51,9 +56,11 @@ class _BackgroudWidget extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: FadeInImage(
+        child: productImage == null
+          ? Image(image: AssetImage('assets/no-image.png'))
+          : FadeInImage(
           placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
+          image: NetworkImage(productImage!),
           fit: BoxFit.cover,
         ),
       ),
@@ -62,8 +69,9 @@ class _BackgroudWidget extends StatelessWidget {
 }
 
 class _ProductDetails extends StatelessWidget {
+  final Product product;
   const _ProductDetails({
-    Key? key,
+    Key? key, required this.product,
   }) : super(key: key);
 
   @override
@@ -79,7 +87,7 @@ class _ProductDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Disc dur',
+              product.name,
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -88,7 +96,7 @@ class _ProductDetails extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              'Id producte',
+              product.id!,
               style: TextStyle(fontSize: 10, color: Colors.white),
             ),
           ],
@@ -107,8 +115,9 @@ class _ProductDetails extends StatelessWidget {
 }
 
 class _PriceTag extends StatelessWidget {
+  final String productPrice;
   const _PriceTag({
-    Key? key,
+    Key? key, required this.productPrice,
   }) : super(key: key);
 
   @override
@@ -119,7 +128,7 @@ class _PriceTag extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            '99€',
+            productPrice+"€",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
@@ -143,6 +152,7 @@ class _Availability extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -151,7 +161,7 @@ class _Availability extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            'Reservat',
+            "Reservat",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
