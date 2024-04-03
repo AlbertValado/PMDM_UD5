@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:productes_app/providers/providers.dart';
 import 'package:productes_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import '../services/services.dart';
@@ -11,6 +13,22 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
 
+    return ChangeNotifierProvider(
+        create: (_) => ProductFormProvider(productsService.selectedProduct),
+        child: _ProductScreenBody(productsService: productsService));
+  }
+}
+
+class _ProductScreenBody extends StatelessWidget {
+  const _ProductScreenBody({
+    Key? key,
+    required this.productsService,
+  }) : super(key: key);
+
+  final ProductsService productsService;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -77,6 +95,10 @@ class ProductScreen extends StatelessWidget {
 class _ProductForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final productForm = Provider.of<ProductFormProvider>(context);
+    final tempProduct = productForm.tempProduct;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
@@ -88,18 +110,40 @@ class _ProductForm extends StatelessWidget {
             children: [
               SizedBox(height: 10),
               TextFormField(
+                initialValue: tempProduct.name,
+                onChanged: (value) => tempProduct.name = value,
+                validator: (value) {
+                  if (value == null || value.length < 1)
+                    return 'El nom és obligatori';
+                },
                 decoration: InputDecorations.authInputDecoration(
                     hintText: 'Nom del producte', labelText: 'Nom:'),
               ),
               SizedBox(height: 30),
               TextFormField(
+                initialValue: '${tempProduct.price}',
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'^(\d+)?\.?\d{0,2}')),
+                ],
+                onChanged: (value){
+                  if(double.tryParse(value) == null){
+                    tempProduct.price = 0;
+                  }else{
+                    tempProduct.price=double.parse(value);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.length < 1)
+                    return 'El nom és obligatori';
+                },
                 keyboardType: TextInputType.number,
                 decoration: InputDecorations.authInputDecoration(
                     hintText: '99€', labelText: 'Preu:'),
               ),
               SizedBox(height: 30),
               SwitchListTile.adaptive(
-                value: true,
+                value: tempProduct.available,
                 title: Text('Disponible'),
                 activeColor: Colors.indigo,
                 onChanged: (value) {
