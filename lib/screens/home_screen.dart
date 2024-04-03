@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
 
-    if(productsService.isLoading) return LoadingScreen();
+    if (productsService.isLoading) return LoadingScreen();
 
     return Scaffold(
       appBar: AppBar(
@@ -19,14 +19,15 @@ class HomeScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         itemCount: productsService.products.length,
-        itemBuilder: (BuildContext context, int index){
-          return Column(
-            children: [
-              ProductCard(product: productsService.products[index]),
-            ],
-          );
-        }
+        itemBuilder: (BuildContext context, int index) => GestureDetector(
+          child: ProductCard(product: productsService.products[index]),
+          onTap: () {
+            productsService.selectedProduct =
+                productsService.products[index].copy();
+            Navigator.of(context).pushNamed('product');
+          },
         ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {},

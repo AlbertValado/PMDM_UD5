@@ -5,6 +5,7 @@ import '../models/models.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+
   const ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -19,11 +20,20 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroundWidget(productImage: product.picture,),
-            _ProductDetails(product: product,),
-            Positioned(top: 0, right: 0, child: _PriceTag(productPrice: product.price.toString(),)),
-          if(!product.available)
-            Positioned(top: 0, left: 0, child: _Availability()),
+            _BackgroundWidget(
+              productImage: product.picture,
+            ),
+            _ProductDetails(
+              product: product,
+            ),
+            Positioned(
+                top: 0,
+                right: 0,
+                child: _PriceTag(
+                  productPrice: product.price.toString(),
+                )),
+            if (!product.available)
+              Positioned(top: 0, left: 0, child: _Availability()),
           ],
         ),
       ),
@@ -45,8 +55,10 @@ class ProductCard extends StatelessWidget {
 
 class _BackgroundWidget extends StatelessWidget {
   final String? productImage;
+
   const _BackgroundWidget({
-    Key? key, required this.productImage,
+    Key? key,
+    required this.productImage,
   }) : super(key: key);
 
   @override
@@ -57,12 +69,15 @@ class _BackgroundWidget extends StatelessWidget {
         width: double.infinity,
         height: 400,
         child: productImage == null
-          ? Image(image: AssetImage('assets/no-image.png'))
-          : FadeInImage(
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage(productImage!),
-          fit: BoxFit.cover,
-        ),
+            ? Image(
+                image: AssetImage('assets/no-image.png'),
+                fit: BoxFit.cover,
+              )
+            : FadeInImage(
+                placeholder: AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(productImage!),
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
@@ -70,8 +85,10 @@ class _BackgroundWidget extends StatelessWidget {
 
 class _ProductDetails extends StatelessWidget {
   final Product product;
+
   const _ProductDetails({
-    Key? key, required this.product,
+    Key? key,
+    required this.product,
   }) : super(key: key);
 
   @override
@@ -116,8 +133,10 @@ class _ProductDetails extends StatelessWidget {
 
 class _PriceTag extends StatelessWidget {
   final String productPrice;
+
   const _PriceTag({
-    Key? key, required this.productPrice,
+    Key? key,
+    required this.productPrice,
   }) : super(key: key);
 
   @override
@@ -128,7 +147,7 @@ class _PriceTag extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            productPrice+"€",
+            productPrice + "€",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
@@ -151,7 +170,6 @@ class _Availability extends StatelessWidget {
   const _Availability({
     Key? key,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
